@@ -4,6 +4,8 @@ import { UserModule } from './user/user.module';
 import { TaskModule } from './tasks/tasks.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { NoteController } from './note/note.controller';
+import { NoteModue } from './note/note.module';
 
 @Module({
   imports: [
@@ -12,10 +14,10 @@ import { ConfigModule } from '@nestjs/config';
     }),
     AuthModule,
     UserModule,
+    NoteModue,
     TaskModule,
     PrismaModule,
   ],
-  controllers: [],
   providers: [],
 })
 export class AppModule {}
