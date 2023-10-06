@@ -9,6 +9,7 @@
     "prisma:dev:deploy": "npx prisma migrate deploy",
     "db:dev:remove": "docker compose rm dev-database --stop --force --volumes",
     "db:dev:create": "docker compose up dev-database --detach",
+    "db:dev:start": "npm run db:dev:create && sleep 2 && npm run prisma:dev:deploy",
     "db:dev:restart": "npm run db:dev:remove && npm run db:dev:create && sleep 2 && npm run prisma:dev:deploy",
     "prisma:test:deploy": "dotenv -e .env.test npx prisma migrate deploy",
     "pretest:e2e": "npm run db:test:restart",

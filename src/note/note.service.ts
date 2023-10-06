@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { NoteCreateDto, NoteUpdateDto } from './dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class NoteService {
@@ -14,22 +14,10 @@ export class NoteService {
     const notes = await this.prismaService.note.findMany({
       where: { userId },
     });
-    console.log(notes);
-
     return notes;
   }
 
-  async getSingleById(userId: number, noteId: number) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!user) {
-      throw new ForbiddenException('Invalid user');
-    }
-
+  async getSingleById(noteId: number) {
     const note = await this.prismaService.note.findUnique({
       where: {
         id: noteId,
@@ -42,7 +30,7 @@ export class NoteService {
     return note;
   }
 
-  async creat(userId: number, noteCreateDto: NoteCreateDto) {
+  async create(userId: number, noteCreateDto: NoteCreateDto) {
     const note = await this.prismaService.note.create({
       data: {
         ...noteCreateDto,
@@ -78,5 +66,24 @@ export class NoteService {
     });
   }
 
-  deleteById(userId: number, noteId: number) {}
+  async deleteById(userId: number, noteId: number) {
+    const note = await this.prismaService.note.findUnique({
+      where: {
+        id: noteId,
+        userId,
+      },
+    });
+
+    if (!note) {
+      throw new NotFoundException('Note not found');
+    }
+
+    await this.prismaService.note.delete({
+      where: {
+        id: noteId,
+      },
+    });
+
+    return 'Note deleted successfully';
+  }
 }

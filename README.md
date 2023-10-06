@@ -6,7 +6,10 @@ $ npm install
 
 ## Start the postgres database
 ```bash
-# development
+# development - start
+$ npm run db:dev:start
+
+# development - restart
 $ npm run db:dev:restart
 ```
 

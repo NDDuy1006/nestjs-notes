@@ -20,25 +20,22 @@ import { NoteCreateDto, NoteUpdateDto } from './dto';
 @UseGuards(CustomJwtGuard)
 export class NoteController {
   constructor(private noteService: NoteService) {}
+  @Post()
+  createNote(
+    @GetUser('id') userId: number,
+    @Body() noteCreateDto: NoteCreateDto,
+  ) {
+    return this.noteService.create(userId, noteCreateDto);
+  }
+
   @Get()
   getAllNotes(@GetUser('id') userId: number) {
     return this.noteService.getAll(userId);
   }
 
   @Get('/getSingle/:noteId')
-  getNoteById(
-    @GetUser('id') userId: number,
-    @Param('noteId', ParseIntPipe) noteId: number,
-  ) {
-    return this.noteService.getSingleById(userId, noteId);
-  }
-
-  @Post()
-  createNote(
-    @GetUser('id') userId: number,
-    @Body() noteCreateDto: NoteCreateDto,
-  ) {
-    return this.noteService.creat(userId, noteCreateDto);
+  getNoteById(@Param('noteId', ParseIntPipe) noteId: number) {
+    return this.noteService.getSingleById(noteId);
   }
 
   @Patch(':noteId')
@@ -53,7 +50,7 @@ export class NoteController {
   @Delete()
   deleteNoteById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) noteId: number,
+    @Query('id', ParseIntPipe) noteId: number,
   ) {
     return this.noteService.deleteById(userId, noteId);
   }

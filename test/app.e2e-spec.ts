@@ -131,6 +131,53 @@ describe('App e2e test', () => {
         });
       });
     });
+
+    describe('Note', () => {
+      describe('Create notes', () => {
+        it('should create first note successfully', () => {
+          return pactum
+            .spec()
+            .post('/notes')
+            .withHeaders({
+              Authorization: 'Bearer $S{accessToken}',
+            })
+            .withBody({
+              title: 'First Post',
+              description: 'First Article of mine',
+              url: 'yahoo',
+            })
+            .expectStatus(201)
+            .stores('noteId01', 'id');
+        });
+
+        it('should create second note successfully', () => {
+          return pactum
+            .spec()
+            .post('/notes')
+            .withHeaders({
+              Authorization: 'Bearer $S{accessToken}',
+            })
+            .withBody({
+              title: 'Second Post',
+              description: 'Second Article of mine',
+              url: 'google',
+            })
+            .expectStatus(201)
+            .stores('noteId02', 'id');
+        });
+
+        // it('should return the note with correct ID', () => {
+        //   return pactum
+        //     .spec()
+        //     .get('/notes/getSingle')
+        //     .withHeaders({
+        //       Authorization: 'Bearer $S{accessToken}',
+        //     })
+        //     .withQueryParams('1')
+        //     .expectStatus(200);
+        // });
+      });
+    });
   });
 
   afterAll(async () => {
